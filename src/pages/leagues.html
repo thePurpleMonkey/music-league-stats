@@ -1,0 +1,7 @@
+<template>
+  <div id="leagues-container" class="list-group">
+    <a href="#" class="list-group-item list-group-item-action" route-href="route: league; params.bind: { league_id: league.id }" repeat.for="league of leagues">
+      <h5>${league.name}</h5>
+    </a>
+  </div>
+</template>
