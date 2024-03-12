@@ -16,6 +16,7 @@ export class App {
       { route: "leagues/:league_id/members/:member_id", moduleId: PLATFORM.moduleName("pages/member"), title: "Member", name: "member" },
       { route: "leagues/:league_id/members/:member_id/votes_given", moduleId: PLATFORM.moduleName("pages/votes-given"), title: "Votes Given", name: "votes_given" },
       { route: "leagues/:league_id/members/:member_id/votes_received", moduleId: PLATFORM.moduleName("pages/votes-received"), title: "Votes Received", name: "votes_received" },
+      { route: "leagues/:league_id/members/:member_id/round_standings", moduleId: PLATFORM.moduleName("pages/round-standings"), title: "Round Standings", name: "round_standings" },
       { route: "leagues/:league_id/rounds/:round_id", moduleId: PLATFORM.moduleName("pages/round"), title: "Round", name: "round" },
       { route: "leagues/:league_id/rounds/:round_id/by_voter", moduleId: PLATFORM.moduleName("pages/by-voter"), title: "Round by Voter", name: "by_voter" },
       { route: "leagues/:league_id/rounds/:round_id/by_recipient", moduleId: PLATFORM.moduleName("pages/by-recipient"), title: "Round by Submission", name: "by_recipient" },

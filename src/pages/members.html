@@ -1,7 +1,16 @@
 <template>
+  <require from="./members.css"></require>
+
   <div id="leagues-container" class="list-group">
     <a class="list-group-item list-group-item-action" route-href="route: member; params.bind: { league_id: league_id, member_id: member.id }" repeat.for="member of members">
-      <h5>${member.name}</h5>
+      <div class="row">
+        <div class="col-auto">
+          <img src="${member.picture}" class="picture">
+        </div>
+        <div class="col vertical_center">
+          <h5>${member.name}</h5>
+        </div>
+      </div>
     </a>
   </div>
 </template>
