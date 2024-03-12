@@ -1,7 +1,39 @@
 <template>
+  <require from="./by-recipient.css"></require>
+
   <div id="recipients-container" class="list-group">
-    <a class="list-group-item list-group-item-action" route-href="route: round; params.bind: { league_id: league_id, round_id: round.id }" repeat.for="round of rounds">
-      <h5>${round.name}</h5>
-    </a>
+    <div class="list-group-item submission" repeat.for="submission of submissions">
+      <div class="row">
+        <div class="col-auto">
+          <img src="${submission.track.picture}" class="track_picture">
+        </div>
+        <div class="col">
+          <div class="track_name">${submission.track.name}</div>
+        </div>
+        <div class="col-auto text-end">
+          <div class="vote_total">${submission.total_votes()}</div>
+          <div class="num_voter text-muted">${submission.votes.length} voters</div>
+        </div>
+      </div>
+
+      <div id="submitted_by_row" class="row">
+        <img src="${submission.submitter.picture}" class="voter_picture">
+        <div class="col vertical_center">
+          <div>Submitted by ${submission.submitter.name}</div>
+        </div>
+      </div>
+
+      <div class="row voter" repeat.for="vote of submission.votes">
+        <div class="col-auto">
+          <img src="${vote.voter.picture}" class="voter_picture">
+        </div>
+        <div class="col vertical_center">
+          <div>${vote.voter.name}</div>
+        </div>
+        <div class="col-auto vertical_center individual_vote">
+          <div>${vote.votes}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

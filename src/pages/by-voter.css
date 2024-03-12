@@ -1,0 +1,42 @@
+.voter_picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.track_picture {
+    width: 50px;
+    height: 50px;
+}
+
+.vote_total {
+    font-size: xx-large;
+    color: purple;
+}
+
+.vertical_center {
+    display: flex;
+    align-items: center;
+}
+
+.voter {
+    /* margin-bottom: 1em; */
+    margin-left: 4em;
+    padding: 1em 0;
+    border-top: 1px lightgray solid;
+}
+
+#submitted_by_row {
+    margin: .5em 0;
+}
+
+.individual_vote {
+    font-size: larger;
+    margin-right: 1em;
+}
+
+.track_name {
+    font-size: larger;
+    font-weight: bold;
+}

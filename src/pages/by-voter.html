@@ -1,3 +1,40 @@
 <template>
-  <h1>${message}</h1>
+  <require from="./by-voter.css"></require>
+
+  <div id="recipients-container" class="list-group">
+    <div class="list-group-item submission" repeat.for="vote of votes">
+      <!-- <div class="row">
+        <div class="col-auto">
+          <img src="${submission.track.picture}" class="track_picture">
+        </div>
+        <div class="col">
+          <div class="track_name">${submission.track.name}</div>
+        </div>
+        <div class="col-auto text-end">
+          <div class="vote_total">${submission.total_votes()}</div>
+          <div class="num_voter text-muted">${submission.votes.length} voters</div>
+        </div>
+      </div> -->
+
+      <div id="submitted_by_row" class="row">
+        <img src="${vote.voter.picture}" class="voter_picture">
+        <div class="col vertical_center">
+          <div>${vote.voter.name} voted for:</div>
+        </div>
+      </div>
+
+      <div class="row voter" repeat.for="v of vote.votes">
+        <div class="col-auto">
+          <img src="${v.track.picture}" class="track_picture">
+        </div>
+        <div class="col">
+          <div class="w-100 track_name">${v.track.name}</div>
+          <div class="w-100">Submitted by ${v.track.submitter.name}</div>
+        </div>
+        <div class="col-auto vertical_center individual_vote">
+          <div>${v.votes}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
