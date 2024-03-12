@@ -49,7 +49,7 @@ export class LeagueApi {
         }
 
         const rounds: Round[] = [];
-        const result = this.database.exec("SELECT DISTINCT round_id, name FROM results JOIN rounds ON results.round_id = rounds.id WHERE results.league_id = $league_id", { "$league_id": league_id });
+        const result = this.database.exec("SELECT DISTINCT round_id, name FROM results JOIN rounds ON results.round_id = rounds.id WHERE results.league_id = $league_id ORDER BY sequence", { "$league_id": league_id });
         console.log(`Retrieved ${result.length} records.`);
         if (result.length > 0 && result[0].values) {
             const rows = result[0].values;
@@ -155,5 +155,81 @@ export class LeagueApi {
         }
 
         return members;
+    }
+
+    async get_league_members(league_id: string): Promise<Member[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const members: Member[] = [];
+        const result = this.database.exec("SELECT DISTINCT id, name, picture FROM members JOIN results ON results.voter_id = id WHERE league_id = $league_id ORDER BY name", { "$league_id": league_id });
+        console.log(`Retrieved ${result.length} members.`);
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                const id = row[0].toString();
+                const name = row[1].toString();
+                const picture = row[2].toString();
+                members.push(new Member(id, name, picture));
+            });
+        }
+
+        return members;
+    }
+
+    async get_votes_received(league_id: string, member_id: string): Promise<Vote[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const members = await this.get_members();
+        const votes: Vote[] = []
+
+        const result = this.database.exec("SELECT voter_id, SUM(votes) FROM results WHERE league_id = $league_id AND recipient_id = $member_id GROUP BY voter_id ORDER BY SUM(votes) DESC", { "$league_id": league_id, "$member_id": member_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                votes.push(new Vote(members.get(row[0].toString()), row[1].valueOf() as number));
+            });
+        }
+
+        return votes;
+    }
+
+    async get_votes_given(league_id: string, member_id: string): Promise<Vote[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const members = await this.get_members();
+        const votes: Vote[] = []
+
+        const result = this.database.exec("SELECT recipient_id, SUM(votes) FROM results WHERE league_id = $league_id AND voter_id = $member_id GROUP BY recipient_id ORDER BY SUM(votes) DESC", { "$league_id": league_id, "$member_id": member_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                votes.push(new Vote(members.get(row[0].toString()), row[1].valueOf() as number));
+            });
+        }
+
+        return votes;
+    }
+
+    async get_member(member_id: string): Promise<Member> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        let member: Member;
+
+        const result = this.database.exec("SELECT id, name, picture FROM members WHERE id = $member_id", { "$member_id": member_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            const row = result[0].values[0];
+            member = new Member(row[0].toString(), row[1].toString(), row[2].toString());
+        }
+
+        return member;
     }
 }

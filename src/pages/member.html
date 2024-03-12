@@ -1,0 +1,13 @@
+<template>
+  <div id="options-container" class="list-group">
+    <a class="list-group-item list-group-item-action" route-href="route: votes_given; params.bind: { league_id: league_id, member_id: member_id }">
+      <h5>Votes given</h5>
+    </a>
+    <a class="list-group-item list-group-item-action" route-href="route: votes_received; params.bind: { league_id: league_id, member_id: member_id }">
+      <h5>Votes received</h5>
+    </a>
+    <a class="list-group-item list-group-item-action" route-href="route: round_standings; params.bind: { league_id: league_id, member_id: member_id }">
+      <h5>Round standings</h5>
+    </a>
+  </div>
+</template>
