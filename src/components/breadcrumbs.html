@@ -1,0 +1,13 @@
+<template>
+  <nav>
+    <ol class="breadcrumb">
+      <li repeat.for="breadcrumb of breadcrumbs" class="breadcrumb-item ${$last ? 'active' : ''}">
+        <template if.bind="$last">${breadcrumb.name}</template>
+        <template if.bind="!$last"><a href="#" route-href="route.bind: breadcrumb.route; params.bind: breadcrumb.params">${breadcrumb.name}</a></template>
+      </li>
+      <li if.bind="router.isNavigating" class="breadcrumb-item">
+        <span class="fa fa-spinner fa-pulse"></span>
+      </li>
+    </ol>
+  </nav>
+</template>

@@ -1,12 +1,12 @@
 <template>
   <require from="./app.css"></require>
   <require from="./components/header"></require>
+  <require from="./components/breadcrumbs"></require>
   <header></header>
   
   
   <div class="container">
-    <div class="row">
-      <router-view id="router"></router-view>
-    </div>
+    <breadcrumbs></breadcrumbs>
+    <router-view id="router"></router-view>
   </div>
 </template>

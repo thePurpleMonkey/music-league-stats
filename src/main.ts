@@ -1,7 +1,7 @@
-import { bootstrap } from 'aurelia-bootstrapper';
 import {Aurelia} from 'aurelia-framework';
 import environment from '../config/environment.json';
 import {PLATFORM} from 'aurelia-pal';
+import "bootswatch/dist/darkly/bootstrap.min.css";
 import 'bootstrap/dist/css/bootstrap.css';
 
 export function configure(aurelia: Aurelia): void {
