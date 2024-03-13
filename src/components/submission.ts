@@ -18,4 +18,8 @@ export class Submission {
   total_votes(): number {
     return this.votes.reduce((accumulator, currentValue) => accumulator + currentValue.votes, 0);
   }
+
+  total_voters(): number {
+    return this.votes.filter(v => v.votes > 0).length;
+  }
 }
