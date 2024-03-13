@@ -1,3 +1,22 @@
 <template>
-  <h1>${message}</h1>
+  <require from="./round-standings.css"></require>
+  <require from="../components/percentage-format"></require>
+  <require from="../components/ordinal-suffix-format"></require>
+
+  <div id="rounds-container" class="list-group">
+    <div class="list-group-item submission" repeat.for="vote of votes">
+      <div class="row">
+        <div class="col">
+          <div class="round_name">${vote.round.name}</div>
+        </div>
+        <div class="col-auto text-end">
+          <div class="vote_total">${vote.votes}</div>
+          <div class="text-muted">${get_round_percentage(vote.round.id) | percentageFormat } of total votes</div>
+        </div>
+        <div class="col-auto ranking-container">
+          <div><span class="placement">${vote.placement}</span><span class="ordinal-suffix align-top">${vote.placement | ordinalSuffixFormat }</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

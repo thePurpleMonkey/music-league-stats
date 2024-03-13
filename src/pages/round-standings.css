@@ -1,0 +1,17 @@
+.placement {
+    font-size: 4em;
+}
+
+.ordinal-suffix {
+    font-size: 1.5em;
+    position: relative;
+    top: .5em;
+}
+
+.ranking-container {
+    min-width: 7.5em;
+}
+
+.vote_total {
+    font-size: larger;
+}

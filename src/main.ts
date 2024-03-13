@@ -8,6 +8,7 @@ export function configure(aurelia: Aurelia): void {
   aurelia.use
     .standardConfiguration()
     .feature(PLATFORM.moduleName('resources/index'));
+    // .plugin(PLATFORM.moduleName('aurelia-templating-resources'));
 
   aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');
 

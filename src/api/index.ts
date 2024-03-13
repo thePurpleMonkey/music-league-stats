@@ -7,6 +7,7 @@ import { Vote } from 'components/vote';
 // import * as SQL from 'sql.js';
 import initSqlJs, { Database } from "sql.js";
 import { Votes } from 'components/votes';
+import { Placement } from 'components/placement';
 // import initSqlJs, * as SQL from 'sql.js/dist/sql-wasm.js'
 
 const SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` });
@@ -43,23 +44,23 @@ export class LeagueApi {
         return leagues;
     }
 
-    async get_rounds(league_id: string): Promise<Round[]> {
-        if (!this.database) {
-            await this.connect();
-        }
+    // async get_rounds(league_id: string): Promise<Round[]> {
+    //     if (!this.database) {
+    //         await this.connect();
+    //     }
 
-        const rounds: Round[] = [];
-        const result = this.database.exec("SELECT DISTINCT round_id, name FROM results JOIN rounds ON results.round_id = rounds.id WHERE results.league_id = $league_id ORDER BY sequence", { "$league_id": league_id });
-        console.log(`Retrieved ${result.length} records.`);
-        if (result.length > 0 && result[0].values) {
-            const rows = result[0].values;
-            rows.forEach(row => {
-                rounds.push(new Round(row[0], row[1]));
-            });
-        }
+    //     const rounds: Round[] = [];
+    //     const result = this.database.exec("SELECT DISTINCT round_id, name FROM results JOIN rounds ON results.round_id = rounds.id WHERE results.league_id = $league_id ORDER BY sequence", { "$league_id": league_id });
+    //     console.log(`Retrieved ${result.length} records.`);
+    //     if (result.length > 0 && result[0].values) {
+    //         const rows = result[0].values;
+    //         rows.forEach(row => {
+    //             rounds.push(new Round(row[0].toString(), row[1].toString()));
+    //         });
+    //     }
 
-        return rounds;
-    }
+    //     return rounds;
+    // }
 
     async get_submissions(round_id: string): Promise<Submission[]> {
         if (!this.database) {
@@ -225,11 +226,90 @@ export class LeagueApi {
 
         const result = this.database.exec("SELECT id, name, picture FROM members WHERE id = $member_id", { "$member_id": member_id });
         if (result.length > 0 && result[0].values) {
-            const rows = result[0].values;
             const row = result[0].values[0];
             member = new Member(row[0].toString(), row[1].toString(), row[2].toString());
         }
 
         return member;
+    }
+
+    async get_round_standings(league_id: string, member_id: string): Promise<Vote[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const member = (await this.get_members()).get(member_id);
+        const rounds = await this.get_rounds(league_id);
+        const votes: Vote[] = []
+
+        const result = this.database.exec("SELECT round_id, SUM(votes) FROM results JOIN rounds ON results.round_id = rounds.id WHERE league_id = $league_id AND recipient_id = $member_id GROUP BY round_id ORDER BY sequence", { "$league_id": league_id, "$member_id": member_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                const vote = new Vote(member, row[1].valueOf() as number);
+                vote.round = rounds.find(r => r.id == row[0].toString());
+                votes.push(vote);
+            });
+        }
+
+        return votes;
+    }
+
+    async get_rounds(league_id: string): Promise<Round[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const rounds: Round[] = [];
+
+        const result = this.database.exec("SELECT round_id, name, SUM(votes) FROM results JOIN rounds ON results.round_id = rounds.id WHERE league_id = $league_id GROUP BY round_id ORDER BY sequence", { "$league_id": league_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                rounds.push(new Round(row[0].toString(), row[1].toString(), row[2].valueOf() as number));
+            });
+        }
+
+        return rounds;
+    }
+
+    async get_round_rankings(round_id: string): Promise<Placement[]> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        const ranking: Placement[] = [];
+        const round = await this.get_round(round_id);
+        let rank = 1;
+
+        const result = this.database.exec("SELECT id, name, picture, SUM(votes) FROM results JOIN members ON results.recipient_id = members.id WHERE round_id = $round_id GROUP BY recipient_id ORDER BY SUM(votes) DESC", { "$round_id": round_id });
+        if (result.length > 0 && result[0].values) {
+            const rows = result[0].values;
+            rows.forEach(row => {
+                const member = new Member(row[0].toString(), row[1].toString(), row[2].toString());
+                const placement = new Placement(member, round, row[3].valueOf() as number, rank);
+                placement.round = round;
+                ranking.push(placement);
+                rank += 1;
+            });
+        }
+
+        return ranking;
+    }
+
+    async get_round(round_id: string): Promise<Round> {
+        if (!this.database) {
+            await this.connect();
+        }
+
+        let round: Round;
+
+        const result = this.database.exec("SELECT id, name, sequence, SUM(votes) FROM rounds JOIN results ON round_id = id WHERE id = $round_id GROUP BY recipient_id ORDER BY SUM(votes) DESC", { "$round_id": round_id });
+        if (result.length > 0 && result[0].values) {
+            const row = result[0].values[0];
+            round = new Round(row[0].toString(), row[1].toString(), row[2].valueOf() as number);
+        }
+
+        return round;
     }
 }
