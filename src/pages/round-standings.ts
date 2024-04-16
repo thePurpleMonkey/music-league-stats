@@ -43,7 +43,7 @@ export class RoundStandings {
       new Breadcrumb(league_name, "league", {league_id: this.league_id}),
       new Breadcrumb("Members", "members", params),
       new Breadcrumb(member_name, "member", {league_id: this.league_id, member_id: member_id}),
-      new Breadcrumb("Votes Given", "votes_given", {league_id: this.league_id, member_id: member_id}),
+      new Breadcrumb("Round Standings", "round-standings", {league_id: this.league_id, member_id: member_id}),
     ];
     this.events.publish(new SetBreadcrumbs(breadcrumbs));
   }

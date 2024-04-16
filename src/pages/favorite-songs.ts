@@ -8,7 +8,7 @@ import { SetBreadcrumbs } from 'components/events';
 import { load_league_name, load_member_name } from 'components/utilities';
 
 @autoinject
-export class VotesReceived {
+export class FavoriteSongs {
   league_id: string;
   member: Member;
   votes: Vote[];
@@ -26,7 +26,7 @@ export class VotesReceived {
       this.member = member;
     });
 
-    this.api.get_votes_received(this.league_id, member_id).then((votes) => {
+    this.api.get_favorite_songs(this.league_id, member_id).then((votes) => {
       console.log("Votes:", votes);
       this.votes = votes;
     });
@@ -36,7 +36,7 @@ export class VotesReceived {
       new Breadcrumb(league_name, "league", {league_id: this.league_id}),
       new Breadcrumb("Members", "members", params),
       new Breadcrumb(member_name, "member", {league_id: this.league_id, member_id: member_id}),
-      new Breadcrumb("Votes Received", "votes_received", {league_id: this.league_id, member_id: member_id}),
+      new Breadcrumb("Favorite Songs", "favorite_songs", {league_id: this.league_id, member_id: member_id}),
     ];
     this.events.publish(new SetBreadcrumbs(breadcrumbs));
   }

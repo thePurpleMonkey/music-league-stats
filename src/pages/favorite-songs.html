@@ -1,0 +1,22 @@
+<template>
+  <require from="./favorite-songs.css"></require>
+
+  <div id="recipients-container" class="list-group">
+    <div class="list-group-item row" repeat.for="vote of votes">
+      <div class="d-flex w-100">
+        <img src="${vote.track.picture}" class="track_picture">
+        <div class="flex-grow-1 ms-3">
+          <div class="w-100 track_name">${vote.track.name}</div>
+          <div class="w-100">Submitted by ${vote.track.submitter.name}</div>
+        </div>
+        <div class="vertical_center individual_vote">
+          <div>${vote.votes}</div>
+        </div>
+      </div>
+
+      <!-- <div class="row voter" repeat.for="v of vote.votes"> -->
+        
+      <!-- </div> -->
+    </div>
+  </div>
+</template>
