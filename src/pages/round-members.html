@@ -1,0 +1,16 @@
+<template>
+  <require from="./members.css"></require>
+
+  <div id="members-container" class="list-group">
+    <a class="list-group-item list-group-item-action" route-href="route: similarity; params.bind: { league_id: league_id, round_id: round_id, member_id: member.id }" repeat.for="member of members">
+      <div class="row">
+        <div class="col-auto">
+          <img src="${member.picture}" class="picture">
+        </div>
+        <div class="col vertical_center">
+          <h5>${member.name}</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+</template>

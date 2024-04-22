@@ -1,0 +1,21 @@
+<template>
+  <require from="./similarity.css"></require>
+  <require from="../components/percentage-format"></require>
+  <require from="../components/ordinal-suffix-format"></require>
+
+  <div id="rounds-container" class="list-group">
+    <div class="list-group-item submission" repeat.for="member of similarities">
+      <div class="row">
+        <div class="col-auto">
+          <img src="${member.picture}" class="picture">
+        </div>
+        <div class="col vertical_center">
+          <h5>${member.name}</h5>
+        </div>
+        <div class="col-auto text-end">
+          <div class="similarity">${member.similarity | percentageFormat}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

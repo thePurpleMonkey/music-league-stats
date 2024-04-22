@@ -1,3 +1,4 @@
+import { Similarity } from './../pages/similarity';
 import { Member } from 'components/member';
 import { League } from 'components/league';
 import { Round } from 'components/round';
@@ -54,6 +55,15 @@ export class LeagueApi {
             const data = await response.json() as unknown[]
             const members: Member[] = plainToInstance(Member, data);
             console.log("Retrieved members:", members);
+            return members;
+        });
+    }
+
+    async get_round_members(round_id: string): Promise<Member[]> {
+        return fetch(new URL(`rounds/${round_id}/members`, LeagueApi.BASE_URL)).then(async (response) => {
+            const data = await response.json() as unknown[]
+            const members: Member[] = plainToInstance(Member, data);
+            console.log("Retrieved round members:", members);
             return members;
         });
     }
@@ -127,6 +137,31 @@ export class LeagueApi {
             const votes: Vote[] = plainToInstance(Vote, data);
             console.log("Retrieved votes:", votes);
             return votes;
+        });
+    }
+
+    async get_similarities(round_id: string, member_id: string): Promise<Member[]> {
+        return fetch(new URL(`rounds/${round_id}/similarity/${member_id}`, LeagueApi.BASE_URL)).then(async (response) => {
+            const data = await response.json() as object;
+            console.log("Retrieved similarities:", data);
+
+            const members = await this.get_members();
+            const result = new Array<Member>();
+            Object.entries(data).forEach(([other_member_id, similarity]) => {
+                const m = members.find(m => m.id === other_member_id);
+                m.similarity = similarity;
+                result.push(m);
+            });
+            return result.sort((a, b) => b.similarity - a.similarity);
+        });
+    }
+
+    async get_members(): Promise<Member[]> {
+        return fetch(new URL("members", LeagueApi.BASE_URL)).then(async (response) => {
+            const data = await response.json() as unknown[]
+            const members: Member[] = plainToInstance(Member, data);
+            console.log("Retrieved members:", members);
+            return members;
         });
     }
 }

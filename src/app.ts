@@ -23,6 +23,8 @@ export class App {
       { route: "leagues/:league_id/rounds/:round_id", moduleId: PLATFORM.moduleName("pages/round"), title: "Round", name: "round" },
       { route: "leagues/:league_id/rounds/:round_id/by_voter", moduleId: PLATFORM.moduleName("pages/by-voter"), title: "Round by Voter", name: "by_voter" },
       { route: "leagues/:league_id/rounds/:round_id/by_recipient", moduleId: PLATFORM.moduleName("pages/by-recipient"), title: "Round by Submission", name: "by_recipient" },
+      { route: "leagues/:league_id/rounds/:round_id/similarity", moduleId: PLATFORM.moduleName("pages/round-members"), title: "Round Members", name: "round_members" },
+      { route: "leagues/:league_id/rounds/:round_id/similarity/:member_id", moduleId: PLATFORM.moduleName("pages/similarity"), title: "Voting Comparison", name: "similarity" },
     ]);
 
     this.router = router;
