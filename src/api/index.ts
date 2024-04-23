@@ -12,6 +12,7 @@ import { plainToInstance } from 'class-transformer';
 
 export class LeagueApi {
     private static BASE_URL = "https://musicleaguestats.michaelhumphrey.dev/api/v1/";
+    // private static BASE_URL = "http://localhost:4040/v1/";
 
     async get_leagues(): Promise<League[]> {
         return fetch(new URL("leagues", LeagueApi.BASE_URL)).then(async (response) => {
@@ -142,6 +143,22 @@ export class LeagueApi {
 
     async get_similarities(round_id: string, member_id: string): Promise<Member[]> {
         return fetch(new URL(`rounds/${round_id}/similarity/${member_id}`, LeagueApi.BASE_URL)).then(async (response) => {
+            const data = await response.json() as object;
+            console.log("Retrieved similarities:", data);
+
+            const members = await this.get_members();
+            const result = new Array<Member>();
+            Object.entries(data).forEach(([other_member_id, similarity]) => {
+                const m = members.find(m => m.id === other_member_id);
+                m.similarity = similarity;
+                result.push(m);
+            });
+            return result.sort((a, b) => b.similarity - a.similarity);
+        });
+    }
+
+    async get_league_similarities(league_id: string, member_id: string): Promise<Member[]> {
+        return fetch(new URL(`leagues/${league_id}/similarity/${member_id}`, LeagueApi.BASE_URL)).then(async (response) => {
             const data = await response.json() as object;
             console.log("Retrieved similarities:", data);
 
