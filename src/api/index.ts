@@ -12,7 +12,7 @@ import { plainToInstance } from 'class-transformer';
 
 export class LeagueApi {
     private static BASE_URL = "https://musicleaguestats.michaelhumphrey.dev/api/v1/";
-    // private static BASE_URL = "http://localhost:4040/v1/";
+    //private static BASE_URL = "http://localhost:4040/v1/";
 
     async get_leagues(): Promise<League[]> {
         return fetch(new URL("leagues", LeagueApi.BASE_URL)).then(async (response) => {
@@ -28,7 +28,7 @@ export class LeagueApi {
             const data = await response.json() as unknown[]
             const submissions: Submission[] = plainToInstance(Submission, data);
             console.log("Retrieved submissions:", submissions);
-            submissions.sort((a, b) => b.votes.reduce((sum, bv) => sum + bv.votes, 0) - a.votes.reduce((sum, av) => sum + av.votes, 0));
+            submissions.sort((a, b) => (b.votes.reduce((sum, bv) => sum + bv.votes, 0) - (1/b.votes.length+1)) - (a.votes.reduce((sum, av) => sum + av.votes, 0) - (1/a.votes.length+1)));
             console.log("Sorted submissions:", submissions);
             
             return submissions;
