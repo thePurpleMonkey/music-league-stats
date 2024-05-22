@@ -66,3 +66,25 @@ export function save_member_names(members: Member[]) {
 
     localStorage.setItem("members", JSON.stringify(result, replacer));
 }
+
+export function substitute_URLs(text) {
+	const urls = [];
+	// var urlRegex = /(https?:\/\/[^\s]+)/g;
+	const urlRegex = /(https?:\/\/)?[\w\-~]+(\.[\w\-~]+)+(\/[\w\-~@:%!.]*)*(#[\w-]*)?(\?[^\s]*)?/gi;
+	const result = text.replace(urlRegex, function(match) {
+		let url = match;
+		let suffix = "";
+		let prefix = "";
+		if (match.endsWith('?') || match.endsWith('!')) {
+			suffix = url.substr(url.length - 1, 1); // Get the last character of the url
+			url = url.substring(0, url.length - 1); // Trim the last character of the url
+		}
+		if (!match.startsWith("http")) {
+			prefix = "//";
+		}
+		urls.push(url);
+		return '<a href="' + prefix + url + '" target="_blank" rel="noreferrer noopener">' + url + '</a>' + suffix;
+	});
+
+	return {html: result, URLs: urls};
+}

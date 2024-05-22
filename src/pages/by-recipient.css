@@ -40,3 +40,13 @@
     font-size: larger;
     font-weight: bold;
 }
+
+.voter_name {
+    font-size: large;
+    font-weight: bolder;
+}
+
+.voter_comment{
+    font-size: small;
+    font-weight: light;
+}

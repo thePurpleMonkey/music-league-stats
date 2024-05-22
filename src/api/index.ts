@@ -30,6 +30,10 @@ export class LeagueApi {
             console.log("Retrieved submissions:", submissions);
             submissions.sort((a, b) => (b.votes.reduce((sum, bv) => sum + bv.votes, 0) - (1/b.votes.length+1)) - (a.votes.reduce((sum, av) => sum + av.votes, 0) - (1/a.votes.length+1)));
             console.log("Sorted submissions:", submissions);
+
+            submissions.forEach(submission => {
+                submission.votes = plainToInstance(Vote, submission.votes);
+            });
             
             return submissions;
         });

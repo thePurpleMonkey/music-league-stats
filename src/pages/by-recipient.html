@@ -9,6 +9,7 @@
         </div>
         <div class="col">
           <div class="track_name">${submission.track.name}</div>
+          <blockquote innerhtml.bind="submission.get_html_comment()"></blockquote>
         </div>
         <div class="col-auto text-end">
           <div class="vote_total">${submission.total_votes()}</div>
@@ -27,8 +28,9 @@
         <div class="col-auto">
           <img src="${vote.voter.picture}" class="voter_picture">
         </div>
-        <div class="col vertical_center">
-          <div>${vote.voter.name}</div>
+        <div class="col">
+          <div class="voter_name">${vote.voter.name}</div>
+          <blockquote class="voter_comment" innerhtml.bind="vote.get_html_comment()"></blockquote>
         </div>
         <div class="col-auto vertical_center individual_vote">
           <div>${vote.votes}</div>

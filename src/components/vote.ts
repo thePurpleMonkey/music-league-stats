@@ -1,6 +1,7 @@
 import { Member } from "./member";
 import { Round } from "./round";
 import { Track } from "./track";
+import { substitute_URLs } from "./utilities"
 
 export class Vote {
   voter: Member;
@@ -16,5 +17,9 @@ export class Vote {
     this.comment = comment;
     this.track = track;
     this.round = round;
+  }
+
+  get_html_comment(): string {
+    return substitute_URLs(this.comment).html;
   }
 }

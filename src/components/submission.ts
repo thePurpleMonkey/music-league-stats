@@ -1,6 +1,7 @@
 import { Member } from "./member";
 import { Track } from "./track";
 import { Vote } from "./vote";
+import { substitute_URLs } from "./utilities"
 
 export class Submission {
   track: Track;
@@ -21,5 +22,9 @@ export class Submission {
 
   total_voters(): number {
     return this.votes.filter(v => v.votes > 0).length;
+  }
+
+  get_html_comment(): string {
+    return substitute_URLs(this.comment).html;
   }
 }
